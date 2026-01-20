@@ -1,73 +1,422 @@
-# React + TypeScript + Vite
+# Kiro Agent Configuration Editor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A visual web application for creating and editing Kiro CLI custom agent configuration files. Build, validate, import, and export JSON configuration files through an intuitive form-based interface—no manual JSON editing required.
 
-Currently, two official plugins are available:
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-7.2-646CFF?logo=vite)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Table of Contents
 
-## React Compiler
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Creating a New Configuration](#creating-a-new-configuration)
+  - [Importing an Existing Configuration](#importing-an-existing-configuration)
+  - [Exporting Your Configuration](#exporting-your-configuration)
+  - [Loading Example Agents](#loading-example-agents)
+- [Configuration Options](#configuration-options)
+  - [Basic Fields](#basic-fields)
+  - [Tools Configuration](#tools-configuration)
+  - [MCP Servers](#mcp-servers)
+  - [Hooks](#hooks)
+  - [Tool Settings](#tool-settings)
+  - [Resources](#resources)
+- [Validation](#validation)
+- [Development](#development)
+  - [Project Structure](#project-structure)
+  - [Running Tests](#running-tests)
+  - [Building for Production](#building-for-production)
+- [Technology Stack](#technology-stack)
+- [Contributing](#contributing)
+- [License](#license)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- **Visual Form Editor**: Create agent configurations through an intuitive form interface with organized sections
+- **Real-time JSON Preview**: See your configuration as JSON in real-time with syntax highlighting
+- **Import/Export**: Load existing JSON files and export your configurations for use with Kiro CLI
+- **Live Validation**: Instant feedback on configuration errors with helpful error messages
+- **Example Agents**: Pre-built templates for common development scenarios (Rust, React, AWS DevOps)
+- **Field Documentation**: Tooltips with descriptions and examples for every configuration option
+- **Array Management**: Easy add, remove, and reorder functionality for list-based fields
+- **MCP Server Support**: Configure both local (command-based) and remote (HTTP) MCP servers
+- **Hook Configuration**: Set up hooks for all agent lifecycle trigger points
+- **Tool Settings**: Fine-grained control over write, shell, and AWS tool permissions
+- **Resource Management**: Configure file resources, skills, and knowledge bases
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Quick Start
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# Clone the repository
+git clone <repository-url>
+cd kiro-agent-ui
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Install dependencies
+npm install
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Start the development server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Installation
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
+### Prerequisites
+
+- Node.js 18.x or higher
+- npm 9.x or higher (or yarn/pnpm)
+
+### Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd kiro-agent-ui
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open in browser**
+   Navigate to [http://localhost:5173](http://localhost:5173)
+
+## Usage
+
+### Creating a New Configuration
+
+1. Click **"New Configuration"** in the toolbar to start with a blank form
+2. Fill in the desired fields in each section:
+   - **Basic Configuration**: Name, description, prompt, model, keyboard shortcut, welcome message
+   - **Tools Configuration**: Add tools, allowed tools, and tool aliases
+   - **MCP Servers**: Configure external tool servers
+   - **Hooks**: Set up lifecycle hooks
+   - **Tool Settings**: Configure write, shell, and AWS tool permissions
+   - **Resources**: Add file resources and knowledge bases
+3. Monitor the **JSON Preview** panel to see your configuration in real-time
+4. Check the **validation status** in the footer to ensure your configuration is valid
+
+### Importing an Existing Configuration
+
+1. Click **"Import"** in the toolbar
+2. Select a JSON file from your file system
+3. The form will populate with all values from the imported file
+4. Make any desired modifications
+5. Export when ready
+
+**Supported file formats**: `.json` files containing valid Kiro agent configurations
+
+### Exporting Your Configuration
+
+1. Ensure your configuration is valid (green indicator in footer)
+2. Click **"Export"** in the toolbar
+3. A JSON file will download automatically
+4. The filename will be `{agent-name}.json` or `agent-config.json` if no name is set
+
+**Note**: The Export button is disabled when validation errors exist.
+
+### Loading Example Agents
+
+1. Click **"Load Example"** in the toolbar
+2. Select from available templates:
+   - **Rust Backend Developer**: Cargo, testing, and AWS integration
+   - **Frontend React Developer**: React/TypeScript with modern tooling
+   - **DevOps AWS Engineer**: CDK, CloudFormation, and infrastructure
+3. The form will populate with the example configuration
+4. Customize as needed and export
+
+## Configuration Options
+
+### Basic Fields
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| **Name** | Human-readable identifier for the agent | `my-custom-agent` |
+| **Description** | Brief description of what the agent does | `A specialized agent for backend development` |
+| **System Prompt** | Instructions that define the agent's behavior | `You are a helpful assistant specialized in...` |
+| **Model** | The AI model to use | `claude-sonnet-4-20250514` |
+| **Keyboard Shortcut** | Shortcut to activate the agent | `ctrl+shift+a` |
+| **Welcome Message** | Message displayed when the agent starts | `Hello! I'm your assistant...` |
+| **Include MCP JSON** | Whether to include MCP configuration in context | `true/false` |
+
+### Tools Configuration
+
+#### Tools Array
+List of tool references the agent can use:
+- Built-in tools: `fs_read`, `fs_write`, `shell`, `aws`, `web_search`
+- MCP server tools: `@server-name/tool_name`
+- Wildcards: `*`, `mcp_*`
+
+#### Allowed Tools
+Pre-approved tools that don't require user confirmation.
+
+#### Tool Aliases
+Rename tools to avoid collisions or use shorter names:
+- **Key**: Original tool reference (e.g., `@shell/cargo-build`)
+- **Value**: New alias name (e.g., `build`)
+
+### MCP Servers
+
+Configure Model Context Protocol servers that provide additional tools.
+
+#### Local Servers (Command-based)
+```json
+{
+  "my-server": {
+    "command": "uvx",
+    "args": ["my-mcp-server@latest"],
+    "env": {
+      "API_KEY": "your-key"
     },
-  },
-])
+    "timeout": 30000
+  }
+}
 ```
+
+#### Remote Servers (HTTP)
+```json
+{
+  "remote-api": {
+    "type": "http",
+    "url": "https://api.example.com/mcp"
+  }
+}
+```
+
+### Hooks
+
+Configure commands that run at specific trigger points:
+
+| Hook Type | Description | Has Matcher |
+|-----------|-------------|-------------|
+| **Agent Spawn** | Runs when the agent starts | No |
+| **User Prompt Submit** | Runs when user submits a prompt | No |
+| **Pre Tool Use** | Runs before a tool is executed | Yes |
+| **Post Tool Use** | Runs after a tool is executed | Yes |
+| **Stop** | Runs when the agent stops | No |
+
+**Hook Fields**:
+- `command`: The command to execute
+- `timeout_ms`: Timeout in milliseconds (optional)
+- `cache_ttl_seconds`: Cache duration for results (optional)
+- `matcher`: Tool pattern to match (preToolUse/postToolUse only)
+
+### Tool Settings
+
+#### Write Tool
+- **Allowed Paths**: Glob patterns for paths the write tool can modify
+  - Example: `src/**`, `tests/**`, `!node_modules/**`
+
+#### Shell Tool
+- **Allowed Commands**: Commands explicitly allowed
+- **Denied Commands**: Commands explicitly blocked
+- **Auto-allow Readonly**: Automatically allow read-only commands
+
+#### AWS Tool
+- **Allowed Services**: AWS services the agent can use
+  - Example: `s3`, `dynamodb`, `lambda`, `cloudformation`
+- **Auto-allow Readonly**: Automatically allow read-only operations
+
+### Resources
+
+#### URI Resources
+Simple file or skill references:
+- `file://./README.md`
+- `file://./src/**/*.ts`
+- `skill://code-review`
+
+#### Knowledge Base Resources
+Indexed document collections for semantic search:
+```json
+{
+  "type": "knowledgeBase",
+  "source": "./docs",
+  "name": "Project Documentation",
+  "description": "API docs and guides",
+  "indexType": "best",
+  "autoUpdate": true
+}
+```
+
+**Index Types**:
+- `best`: Higher quality indexing (slower)
+- `fast`: Faster indexing (lower quality)
+
+## Validation
+
+The editor validates your configuration in real-time:
+
+- **Green indicator**: Configuration is valid and ready to export
+- **Red indicator**: Validation errors exist (count shown)
+- **Field-level errors**: Red border and error message on invalid fields
+
+### Common Validation Rules
+
+| Field | Rule |
+|-------|------|
+| Keyboard Shortcut | Must match `[ctrl+][shift+]key` format |
+| MCP Server (Local) | Must have a `command` field |
+| MCP Server (HTTP) | Must have a valid `url` field |
+| Server Names | Must be unique within configuration |
+| Tool Alias Key | Must match `@server/tool_name` format |
+| Tool Alias Value | Must be a valid identifier (alphanumeric + underscore) |
+
+## Development
+
+### Project Structure
+
+```
+kiro-agent-ui/
+├── src/
+│   ├── components/          # React components
+│   │   ├── App.tsx          # Root component
+│   │   ├── BasicFieldsSection.tsx
+│   │   ├── ToolsSection.tsx
+│   │   ├── MCPServersSection.tsx
+│   │   ├── HooksSection.tsx
+│   │   ├── ToolSettingsSection.tsx
+│   │   ├── ResourcesSection.tsx
+│   │   ├── JSONPreviewPanel.tsx
+│   │   ├── Toolbar.tsx
+│   │   ├── ArrayField.tsx   # Reusable array editor
+│   │   ├── KeyValueField.tsx # Reusable key-value editor
+│   │   └── FieldWithTooltip.tsx
+│   ├── services/            # Business logic
+│   │   ├── ValidationEngine.ts
+│   │   ├── FileHandler.ts
+│   │   └── ExampleGenerator.ts
+│   ├── schemas/             # Zod validation schemas
+│   │   └── agent-config.ts
+│   ├── types/               # TypeScript type definitions
+│   │   └── agent-config.ts
+│   └── main.tsx             # Entry point
+├── tests/
+│   └── e2e/                 # Playwright E2E tests
+├── package.json
+├── vite.config.ts
+├── vitest.config.ts
+└── tsconfig.json
+```
+
+### Available Scripts
+
+```bash
+# Start development server
+npm run dev
+
+# Run unit tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Run linter
+npm run lint
+```
+
+### Running Tests
+
+#### Unit Tests (Vitest)
+```bash
+# Run all tests
+npm test
+
+# Run with coverage report
+npm run test:coverage
+
+# Watch mode for development
+npm run test:watch
+```
+
+**Test Coverage**:
+- 224 tests across 7 test files
+- Validation Engine: 48 tests
+- File Handler: 71 tests
+- Example Generator: 18 tests
+- Components: 64 tests
+
+#### Property-Based Tests
+The test suite includes property-based tests using fast-check that verify:
+- Import/export round-trip consistency
+- Keyboard shortcut format validation
+- Array manipulation invariants
+- Tool alias validation
+- Example agent validity
+
+### Building for Production
+
+```bash
+# Build the application
+npm run build
+
+# Preview the build locally
+npm run preview
+```
+
+The build output will be in the `dist/` directory.
+
+## Technology Stack
+
+| Category | Technology |
+|----------|------------|
+| **Framework** | React 19.2 |
+| **Language** | TypeScript 5.9 |
+| **Build Tool** | Vite 7.2 |
+| **Styling** | Tailwind CSS 4.1 |
+| **Validation** | Zod 4.3 |
+| **Unit Testing** | Vitest 4.0 |
+| **Property Testing** | fast-check 4.5 |
+| **E2E Testing** | Playwright (via MCP) |
+| **Linting** | ESLint 9.x |
+
+## Browser Support
+
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (latest)
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests (`npm test`)
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+### Development Guidelines
+
+- Write tests for new features
+- Follow existing code style
+- Update documentation as needed
+- Ensure all tests pass before submitting PR
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Built for use with [Kiro CLI](https://kiro.dev)
+- UI components styled with [Tailwind CSS](https://tailwindcss.com)
+- Validation powered by [Zod](https://zod.dev)
