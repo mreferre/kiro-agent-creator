@@ -41,6 +41,11 @@ A visual web application for creating and editing Kiro CLI custom agent configur
 - [Contributing](#contributing)
 - [License](#license)
 
+## Kiro Agent Configuration Editor Screenshot
+
+
+![Kiro Agent Configuration Editor Screenshot](./images/kiro-agent-ui.png)
+
 ## Features
 
 - **Visual Form Editor**: Create agent configurations through an intuitive form interface with organized sections
