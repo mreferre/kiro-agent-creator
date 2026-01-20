@@ -29,7 +29,6 @@ import {
   FileHandler,
   fileHandler,
 } from './FileHandler';
-import type { AgentConfiguration } from '../types/agent-config';
 
 // Mock FileReader for testing importFile
 class MockFileReader {
